@@ -38,10 +38,6 @@ namespace JunhyehokAgentRedis
             connection_type = conn_type;
             //Initialize MMF
             mmf = MemoryMappedFile.CreateOrOpen(mmfName, Marshal.SizeOf(typeof(AAServerInfoResponse)));
-            //Initialize Lock
-            bool mutexCreated;
-            Mutex mutex = new Mutex(true, "MMF_IPC" + mmfName, out mutexCreated);
-            mutex.ReleaseMutex();
         }
 
         public ReceiveHandle(ClientHandle client, Packet recvPacket)
@@ -114,7 +110,7 @@ namespace JunhyehokAgentRedis
             using (var accessor = mmf.CreateViewAccessor(0, Marshal.SizeOf(aaServerInfoResp)))
             {
                 // Wait for the Lock
-                Mutex mutex = Mutex.OpenExisting("MMF_IPC" + mmfName);
+                Mutex mutex = new Mutex(false, "MMF_IPC" + mmfName);
                 mutex.WaitOne();
 
                 // Read from MMF

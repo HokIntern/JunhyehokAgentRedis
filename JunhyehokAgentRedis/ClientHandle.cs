@@ -199,7 +199,7 @@ namespace JunhyehokAgentRedis
 
             Console.WriteLine("[MEMORYMAPPED FILE] Writing to MMF: ({0})...", ReceiveHandle.mmfName);
 
-            Mutex mutex = Mutex.OpenExisting("MMF_IPC" + ReceiveHandle.mmfName);
+            Mutex mutex = new Mutex(false, "MMF_IPC" + ReceiveHandle.mmfName);
             mutex.WaitOne();
 
             // Create Accessor to MMF
